@@ -1,3 +1,3 @@
-<footer class="container">
-  <p>&copy; 2025 Netcu Sasha &middot;</p>
+<footer class="container-fluid">
+  <p>&copy; 2025 Netcu Sasha</p>
 </footer>
