@@ -2,15 +2,9 @@ package com.parking.parkinglot.entities;
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "cars")
 public class Car {
-    @Column(name = "parking_spot")
-    private String parkingSpot;
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -19,27 +13,19 @@ public class Car {
     @Column(name = "license_plate")
     private String licensePlate;
 
+    @Column(name = "parking_spot")
+    private String parkingSpot;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    private Car owner;
+    private User owner;
 
-    public Car getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(Car owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    @OneToMany(mappedBy = "owner", orphanRemoval = true)
-    private Set<Car> cars = new LinkedHashSet<>();
-
-    public Set<Car> getCars() {
-        return cars;
-    }
-
-    public void setCars(Set<Car> cars) {
-        this.cars = cars;
     }
 
     public String getParkingSpot() {
