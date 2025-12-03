@@ -4,16 +4,21 @@
 
 <t:pageTemplate pageTitle="Users">
     <h1>Users</h1>
-    <div class="container text-center">
-        <c:forEach var="user" items ="${users}">
-            <div class="row">
-                <div class="col">
-                        ${user.username}
+    <form method="POST" action="${pageContext.request.contextPath}/Cars">
+        <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
+            <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddUser">Add User</a>
+        </c:if>
+        <div class="container text-center">
+            <c:forEach var="user" items ="${users}">
+                <div class="row">
+                    <div class="col">
+                            ${user.username}
+                    </div>
+                    <div class="col">
+                            ${user.email}
+                    </div>
                 </div>
-                <div class="col">
-                        ${user.email}
-                </div>
-            </div>
-        </c:forEach>
-    </div>
+            </c:forEach>
+        </div>
+    </form>
 </t:pageTemplate>
