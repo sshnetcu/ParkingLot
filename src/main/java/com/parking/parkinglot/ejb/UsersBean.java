@@ -49,6 +49,16 @@ public class UsersBean {
         }
     }
 
+    public Collection<String> findUsernamesByUserIds(Collection<Long> userIds) {
+        List<String> usernames =
+                entityManager.createQuery(
+                                "SELECT u.username FROM User u WHERE u.id IN :userIds", String.class)
+                        .setParameter("userIds", userIds)
+                        .getResultList();
+        return usernames;
+    }
+
+
     public void createUser(String username, String email, String password, Collection<String> groups) {
         LOG.info("createUser");
         User newUser = new User();

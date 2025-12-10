@@ -1,7 +1,9 @@
 package com.parking.parkinglot.ejb;
 
+import com.parking.parkinglot.common.CarPhotoDto;
 import com.parking.parkinglot.entities.Car;
 import com.parking.parkinglot.common.CarDto;
+import com.parking.parkinglot.entities.CarPhoto;
 import com.parking.parkinglot.entities.User;
 import jakarta.ejb.EJBException;
 import jakarta.ejb.Stateless;
@@ -52,7 +54,7 @@ public class CarsBean {
         }
 
         try {
-            TypedQuery<Car> typedQuery = entityManager.createQuery("SELECT c FROM Car c WHERE Car id = " + carId, Car.class);
+            TypedQuery<Car> typedQuery = entityManager.createQuery("SELECT p FROM Car p WHERE p.id = :id", Car.class).setParameter("id", carId);
             Car car = typedQuery.getSingleResult();
             return new CarDto(car.getId(), car.getLicensePlate(), car.getParkingSpot(), car.getOwner().getUsername());
         } catch (Exception ex) {
@@ -89,6 +91,34 @@ public class CarsBean {
         car.setOwner(user);
 
         entityManager.persist(car);
+    }
+
+    public void addPhotoToCar(Long carId, String filename, String fileType, byte[] fileContent) {
+        LOG.info("addPhotoToCar");
+        CarPhoto photo = new CarPhoto();
+        photo.setFilename(filename);
+        photo.setFileType(fileType);
+        photo.setFileContent(fileContent);
+        Car car = entityManager.find(Car.class, carId);
+        if (car.getPhoto() != null) {
+            entityManager.remove(car.getPhoto());
+        }
+        car.setPhoto(photo);
+
+        photo.setCar(car);
+        entityManager.persist(photo);
+    }
+    public CarPhotoDto findPhotoByCarId(Integer carId) {
+        List<CarPhoto> photos = entityManager
+                .createQuery("SELECT p FROM CarPhoto p where p.car.id = :id", CarPhoto.class)
+                .setParameter("id", carId)
+                .getResultList();
+        if (photos.isEmpty()) {
+            return null;
+        }
+        CarPhoto photo = photos.get(0); // the first element
+        return new CarPhotoDto(photo.getId(), photo.getFilename(), photo.getFileType(),
+                photo.getFileContent());
     }
 
     public void deleteCarsByIds(Collection<Long> carIds) {
