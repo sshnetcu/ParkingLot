@@ -7,12 +7,14 @@
     <form method="POST" action="${pageContext.request.contextPath}/Users">
         <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
             <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddUser">Add User</a>
-            <a class="btn btn-secondary btn-lg" href="${pageContext.request.contextPath}/InvoiceUser">Invoice</a>
+        </c:if>
+        <c:if test="${pageContext.request.isUserInRole('INVOICE_USERS')}">
+            <button class="btn btn-secondary btn-lg" type="submit">Invoice</button>
         </c:if>
         <div class="container text-center">
             <c:forEach var="user" items ="${users}">
                 <div class="row">
-                    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+                    <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
                         <div class="col">
                             <input type="checkbox" name="user_ids" value="${user.id}" />
                         </div>
@@ -23,17 +25,23 @@
                     <div class="col">
                             ${user.email}
                     </div>
+                    <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
+                        <div class="col">
+                            <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditUser?id=${user.id}">Edit User</a>
+                        </div>
+                    </c:if>
                 </div>
             </c:forEach>
         </div>
     </form>
-
-    <c:if test="${not empty invoices}">
-        <h2>Invoices</h2>
-        <c:forEach var="username" items="${invoices}" varStatus="status">
-            ${status.index + 1}. ${username}
-            <br/>
-        </c:forEach>
+    <c:if test="${pageContext.request.isUserInRole('INVOICE_USERS')}">
+        <c:if test="${not empty invoices}">
+            <h2>Invoices</h2>
+            <c:forEach var="username" items="${invoices}" varStatus="status">
+                ${status.index + 1}. ${username}
+                <br/>
+            </c:forEach>
+        </c:if>
     </c:if>
 
 </t:pageTemplate>

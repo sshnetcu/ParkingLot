@@ -1,4 +1,4 @@
-package com.parking.parkinglot.servlets;
+package com.parking.parkinglot.servlets.cars;
 
 import com.parking.parkinglot.common.UserDto;
 import com.parking.parkinglot.ejb.CarsBean;
@@ -31,13 +31,19 @@ public class AddCar extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<UserDto> users = usersBean.findAllUsers();
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/WEB-INF/pages/addCar.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/cars/addCar.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String licensePlate = request.getParameter("license_plate");
-        String parkingSpot = request.getParameter("parking spot");
+
+        /// ///
+        licensePlate = licensePlate.replaceAll("[^a-zA-Z0-9]", "");
+        licensePlate = licensePlate.toUpperCase();
+        /// ///
+
+        String parkingSpot = request.getParameter("parking_spot");
         Long userId = Long.parseLong(request.getParameter("owner_id"));
 
         carsBean.createCar(licensePlate, parkingSpot, userId);

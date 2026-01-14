@@ -22,11 +22,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <c:if test="${pageContext.request.isUserInRole('READ_CARS')}">
+
                             <a class="nav-link ${pageContext.request.requestURI.substring(pageContext.request.requestURI.lastIndexOf("/"))eq '/cars.jsp' ? ' active' : ''}" aria-current="page" href="${pageContext.request.contextPath}/Cars">
                                 Cars
                             </a>
-                        </c:if>
                     </li>
                     <li class="nav-item">
                         <c:if test="${pageContext.request.isUserInRole('READ_USERS')}">
@@ -34,11 +33,6 @@
                                 Users
                             </a>
                         </c:if>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">
-                            Disabled
-                        </a>
                     </li>
                 </ul>
                 <ul>

@@ -28,4 +28,6 @@ public class CarDto {
     public String getOwnerName() {
         return ownerName;
     }
+
+
 }

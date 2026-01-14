@@ -76,10 +76,10 @@ public class CarsBean {
         entityManager.persist(car);
     }
 
-    public void updateCar(String licensePlate, String parkingSpot, Long userId) {
+    public void updateCar(Long carId, String licensePlate, String parkingSpot, Long userId) {
         LOG.info("updateCar");
 
-        Car car = entityManager.find(Car.class, userId);
+        Car car = entityManager.find(Car.class, carId);
         car.setLicensePlate(licensePlate);
         car.setParkingSpot(parkingSpot);
 
@@ -89,8 +89,6 @@ public class CarsBean {
         User user = entityManager.find(User.class, userId);
         user.getCars().add(car);
         car.setOwner(user);
-
-        entityManager.persist(car);
     }
 
     public void addPhotoToCar(Long carId, String filename, String fileType, byte[] fileContent) {

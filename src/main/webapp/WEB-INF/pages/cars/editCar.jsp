@@ -41,6 +41,8 @@
                 </div>
             </div>
         </div>
+        <hr class="mb-4">
+        <input type="hidden" name="car_id" value="${car.id}" />
 
         <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
 

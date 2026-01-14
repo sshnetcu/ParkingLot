@@ -1,4 +1,4 @@
-package com.parking.parkinglot.servlets;
+package com.parking.parkinglot.servlets.users;
 
 import com.parking.parkinglot.common.UserDto;
 import com.parking.parkinglot.ejb.InvoiceBean;
@@ -19,16 +19,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@DeclareRoles({"READ_USERS", "WRITE_USERS"})
+@DeclareRoles({"READ_USERS", "WRITE_USERS", "INVOICE_USERS"})
 
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"READ_USERS"}),
-        httpMethodConstraints = {@HttpMethodConstraint(value = "POST", rolesAllowed = {"WRITE_USERS"})})
+        httpMethodConstraints = {@HttpMethodConstraint(value = "POST", rolesAllowed = {"WRITE_USERS", "INVOICE_USERS"})})
 
 @WebServlet(name = "Users", value = "/Users")
 public class Users extends HttpServlet {
 
     @Inject
     UsersBean usersBean;
+
     @Inject
     InvoiceBean invoiceBean;
 
@@ -37,14 +38,14 @@ public class Users extends HttpServlet {
         List<UserDto> users = usersBean.findAllUsers();
         request.setAttribute("users", users);
 
-        if (!invoiceBean.getUserIds().isEmpty()) {
+        if (!invoiceBean.getUserIds().isEmpty() && request.isUserInRole("INVOICE_USERS")) {
             Collection<String> usernames = usersBean.findUsernamesByUserIds(invoiceBean.getUserIds());
             request.setAttribute("invoices", usernames);
         }
 
 
         request.setAttribute("activePage", "Users");
-        request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/users/users.jsp").forward(request,response);
     }
 
     @Override
